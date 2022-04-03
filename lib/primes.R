@@ -1,15 +1,15 @@
 
-# Erathosthenes -----------------------------------------------------------
+# Erathostenes ------------------------------------------------------------
 
-#' Title
+#' Sieve of Erathostenes
 #'
-#' @param to 
+#' @param to upper bound of primes to return
 #'
-#' @return
+#' @return Vector of primes up to to-argument
 #' @export
 #'
-#' @examples
-primeEvalErathostenes <- function(to){
+#' @examples primes_to_11 <- sieve_ov_Erathostenes(11)
+sieve_ov_Erathostenes <- function(to){
   
   # exceptions
   if (to == 2){
@@ -20,17 +20,18 @@ primeEvalErathostenes <- function(to){
   
   # vars
   upperBound = round(sqrt(to))
-  # print(upperBound)
+  
+  # generate vec of boolean of length "to"
   vecNat = rep(T, to)
   
-  # expection from 1
+  # set 1 to false, edge case
   vecNat[1] <- F
   
   # sieve of erathostenes
+  # start with 2
   lastPrime = 2
   
   for (i in lastPrime:upperBound){
-    
     # skip indeces that are already F
     if (vecNat[i] == F){
       lastPrime = lastPrime + 1
@@ -41,9 +42,8 @@ primeEvalErathostenes <- function(to){
     multiples <- seq(lastPrime*2, to, lastPrime)
     vecNat[multiples] <- F
     
-    # redefine new prime
+    # redefine new lastPrime
     lastPrime = lastPrime + 1
-    
   }
   
   # return primes, i.e. those that are still TRUE
@@ -52,15 +52,17 @@ primeEvalErathostenes <- function(to){
 
 # Cyclic Primes -----------------------------------------------------------
 
-#' Title
+#' Get cyclic primes - E.g. 113, 131, and 311, i.e. cyclic permutatios that
+#' are also primes
 #'
 #' @param primes 
 #'
 #' @return
 #' @export
 #'
-#' @examples
-getCyclicPrimes <- function(primes){
+#' @examples primes_to_11 <- sieve_ov_Erathostenes(11)
+#' get_cyclic_primes(primes_to_11)
+get_cyclic_primes <- function(primes){
   
   # Cache vector for primes - reduces the number of iteration if primes are already in
   # this vectior. E.g. a cyclic prime with 3 digits will appear 3 times and should only
@@ -115,8 +117,6 @@ getCyclicPrimes <- function(primes){
   return(cyclicPrimes)
 }
 
-
-
 # Coin change algo --------------------------------------------------------
 
 #' Title
@@ -138,7 +138,6 @@ coin_change_algo <- function(coins, N){
   # Initialize Algo
   ways[1] = 1
   
-  
   # do dynamic programming
   for (i in 1:lenCoils){
     for (j in 1:length(ways)){
@@ -149,3 +148,6 @@ coin_change_algo <- function(coins, N){
   }
   return(ways[N])
 }
+
+coin_change_algo(c(1,2,3,4),4)
+
