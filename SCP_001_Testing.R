@@ -6,43 +6,19 @@ library(tidyverse)
 # Source Funcs ------------------------------------------------------------
 
 source("lib/primes.R")
+source("lib/integers.R")
 
 # Testing -----------------------------------------------------------------
 
-somePrimes <- sieve_ov_Erathostenes(9999999)
+n = 5000
 
-somePrimes
+somePrimes <- sieve_ov_Erathostenes(999999)
 
-ndigits <- function(x){
-  return(floor(log10(x)+1))
-}
-
-ndigits <- ndigits(1234)
-
-ndigits
-
-get_int_exps <- function(ndigits){
-  pwrs <- c()
-  for (i in 1:ndigits){
-    pwr <- 10**ndigits/10
-    pwrs <- c(pwrs,pwr)
-    ndigits <- ndigits - 1
-  }
-  # shift identity by one 10er exp, since we need the upper range and not the
-  # lower one. Think about 1234, if we decconstruct it by digits using mudolo
-  # we get 2, 3, 4, and 0, but we need the full circle. To get 1 from 1234, we 
-  # need mudolo 1 + max exp, right?
-  pwrs <- pwrs * 10
-  return(pwrs)
-}
-
-exps <- get_int_exps(ndigits)
-exps
-
-
-concatenate_math <- function(x,y,base=10){
-  return(x*base**(ndigits(y))+y)
-}
-
-
-x%%1000%/%100
+x <- somePrimes
+rnd_x <-somePrimes[sample(1:length(x),n)]
+  
+get_digits_vec(x) %>%
+  tibble::as_tibble_col(column_name = "x") %>% 
+  ggplot() + 
+  geom_bar(aes(x=x)) + 
+  scale_x_continuous(breaks = scales::pretty_breaks(11))
