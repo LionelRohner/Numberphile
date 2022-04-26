@@ -1,25 +1,17 @@
 
-# Libs --------------------------------------------------------------------
+# Helpers / Aux -----------------------------------------------------------
 
-library(tidyverse)
+# Internal functions
 
-# Source Funcs ------------------------------------------------------------
-
-source("lib/primes.R")
-
-# Testing -----------------------------------------------------------------
-
-somePrimes <- sieve_ov_Erathostenes(9999999)
-
-somePrimes
+# Get number of digits ----------------------------------------------------
 
 ndigits <- function(x){
   return(floor(log10(x)+1))
 }
 
-ndigits <- ndigits(1234)
 
-ndigits
+# Extract exponents -------------------------------------------------------
+# CAVE: depends on ndigtits()
 
 get_int_exps <- function(ndigits){
   pwrs <- c()
@@ -36,13 +28,16 @@ get_int_exps <- function(ndigits){
   return(pwrs)
 }
 
-exps <- get_int_exps(ndigits)
-exps
+# concatenate -------------------------------------------------------------
 
+# reverses the deconstruction of ints in digits
 
 concatenate_math <- function(x,y,base=10){
   return(x*base**(ndigits(y))+y)
 }
 
+# Exported functions ------------------------------------------------------
 
-x%%1000%/%100
+get_digits_vec <- function(x){
+  return(get_int_exps(ndigits = ndigits(x)))
+}
