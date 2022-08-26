@@ -149,5 +149,6 @@ coin_change_algo <- function(coins, N){
   return(ways[N])
 }
 
-coin_change_algo(c(1,2,3,4),4)
+# TODO: shouldnt this be 3? 1,1,1; 1,1,2; 2,2
+coin_change_algo(c(1,2),4)
 

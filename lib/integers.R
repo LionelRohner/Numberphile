@@ -1,54 +1,42 @@
 
 # Helpers / Aux -----------------------------------------------------------
 
-# Internal functions
-
-# Get number of digits ----------------------------------------------------
-
-# log10 of a number gives us the appromixate number of digits - 1. By using the
-# floor operation we cancel the decimal noise
-
-#' Title
-#'
+#' Get number of digits of a number
+#' log10 of a number gives us the approximate number of digits - 1. By using the floor operation we cancel the decimal noise
 #' @param x 
 #'
 #' @return
-#' @export
 #'
 #' @examples
 
 ndigits <- function(x){
-  return(floor(log10(x)+1))
+  assertthat::assert_that(min(x) >= 0, msg = "x should be positive!")
+  out <- floor(log10(x)+1)
+  return(out)
 }
 
 
-# Extract exponents -------------------------------------------------------
-# CAVE: depends on ndigtits()
-
-# by taking the 10 to the power of the number of digits in a number and dividing
+# By taking 10 to the power of the number of digits of a number and dividing
 # by 10 we get the geometric sequence 1, 10 , 100 , 1000 etc
 
-get_int_exps <- function(ndigits){
+# TODO: ndigits is a vector, rethink the loop
+
+get_powers_of_ten <- function(ndigits){
   pwrs <- c()
   for (i in 1:ndigits){
+    print(i)
     pwr <- 10**ndigits/10
     pwrs <- c(pwrs,pwr)
     ndigits <- ndigits - 1
   }
-  # shift identity by one 10er exp, since we need the upper range and not the
-  # lower one. Think about 1234, if we decconstruct it by digits using mudolo
-  # we get 2, 3, 4, and 0, but we need the full circle. To get 1 from 1234, we 
-  # need mudolo 1 + max exp, right?
+  # Multiply by 10 to get the upper and not the lower range.
   pwrs <- pwrs * 10
   return(pwrs)
 }
 
-# concatenate -------------------------------------------------------------
+# Reverses the deconstruction of integers in digits.https://mathworld.wolfram.com/Concatenation.html
 
-# reverses the deconstruction of ints in digits. This is the formula for mathematical
-# concatenation of integers found on wolfram https://mathworld.wolfram.com/Concatenation.html
-
-#' Title
+#' Concatenate
 #'
 #' @param x 
 #' @param y 
@@ -59,21 +47,19 @@ get_int_exps <- function(ndigits){
 #'
 #' @examples
 concatenate_math <- function(x,y,base=10){
-  return(x*base**(ndigits(y))+y)
+  concant <- x*base**(ndigits(y))+y
+  return(concat)
 }
 
-# Exported functions ------------------------------------------------------
-
-
-# deconstruct an integer into digits --------------------------------------
+# Main functions ------------------------------------------------------
 
 # Combination of the function above plus one more step. We first get the number
 # of digits the integer x followed by its exponent. Then we reapply the previous
 # function but with another base, which is the integer itself
 
-# TOOD: Rethink get_int_exps() to directly output the correct numbers! The same
-# formula was used twice...
+# TODO create a function for x%%exps%/%(exps%/%10) and make a wrapper later
 
+# https://stackoverflow.com/questions/19764244/how-can-we-split-an-integer-number-into-a-vector-of-its-constituent-digits-in-r
 
 #' Title
 #'
@@ -84,7 +70,7 @@ concatenate_math <- function(x,y,base=10){
 #'
 #' @examples
 get_digits_vec <- function(x){
-  exps <- get_int_exps(ndigits = ndigits(x))
+  exps <- get_powers_of_ten(ndigits = ndigits(x))
   return(x%%exps%/%(exps%/%10))
 }
 
